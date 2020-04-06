@@ -8,7 +8,7 @@ metadata:
     kubeaddons.mesosphere.io/provides: storageclass
   annotations:
     catalog.kubeaddons.mesosphere.io/addon-revision: "5.0.8"
-    appversion.kubeaddons.mesosphere.io/pure-csi-1.0.8: "1.0.8"
+    appversion.kubeaddons.mesosphere.io/pure-csi: "1.0.8"
     values.chart.helm.kubeaddons.mesosphere.io/pure-csi: "https://github.com/purestorage/helm-charts/blob/master/pure-csi/values.yaml"
 spec:
   namespace: pure-csi
@@ -21,17 +21,21 @@ spec:
     - name: pure
       enabled: true
   chartReference:
-    chart: pure-csi-1.0.8
+    chart: pure/pure-csi
     repo: https://purestorage.github.io/helm-charts
     version: 1.0.8
     values: |
       ---
-      resizer:
-        enabled: false
-      snapshotter:
-        enabled: true
-      provisioner:
-        enableVolumeScheduling: true
-      storageclass:
-        isDefault: true
-
+      storageclass:  
+        isPureDefault: true
+        pureBackend: pure-file
+      arrays:
+        FlashArrays:
+          - MgmtEndPoint: "1.2.3.4"
+            APIToken: "a526a4c6-18b0-a8c9-1afa-3499293574bb"
+          - MgmtEndPoint: "1.2.3.5"
+            APIToken: "b526a4c6-18b0-a8c9-1afa-3499293574bb"
+        FlashBlades:
+          - MgmtEndPoint: "1.2.3.6"
+            APIToken: "T-c4925090-c9bf-4033-8537-d24ee5669135"
+            NfsEndPoint: "1.2.3.7"
